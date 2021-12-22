@@ -1,0 +1,2 @@
+http://localhost/1818098-RestFullServer/movie
+http://localhost/1818098-RestFullServer/coming_soon
