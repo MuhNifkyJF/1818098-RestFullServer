@@ -15,34 +15,16 @@ class Movie extends RestController
     {
         $id = $this->get('id');
         if ($id === null){
-            $p = $this->get('page');
-            $p = (empty($p) ? 1 : $p);
-            $total_data = $this->movie->count();
-            $total_page = ceil($total_data / 5);
-            $start = ($p - 1) * 5;
-            $list = $this->movie->get(null, 5, $start); 
-            if ($list){
-            $data = [
-                'status' => true,
-                'page' => $p,
-                'total_data' => $total_data,
-                'total_page' => $total_page,
-                'data' => $list
-            ];
-            }else{
-            $data = [
-                'status' => false,
-                'msg' => 'Data Tidak Ditemukan'
-            ];
-            }
-            $this->response($data,RestController::HTTP_OK);
+            $movie = $this->movie->get();
         }else{
-            $data = $this->movie->get('id');
-            if ($data){
-            $this->response(['status'=>true,'data'=> $data],RestController::HTTP_OK);
-            }else{
-            $this->response(['status'=>false,'msg'=> $id .'Data Tidak Ditemukan'],RestController::HTTP_NOT_FOUND);   
-            }
+            $movie = $this->movie->get($id);
+        }
+
+        if ($movie){
+            $this->response([
+                'status' => true,
+                'data' => $movie
+            ], RestController::HTTP_OK);
         }
     }
 
@@ -58,7 +40,7 @@ class Movie extends RestController
           'genre' => $this->post('genre',true),
           'tahun_rilis' => $this->post('tahun_rilis',true),
           'durasi' => $this->post('durasi',true),
-          'negara' => $this->post('negara',true),
+          'negara' => $this->post('negara',true)
       ];
       $simpan=$this->movie->add($data);
       if($simpan['status']){
@@ -74,12 +56,13 @@ class Movie extends RestController
 
         'judul' => $this->put('judul',true),
         'poster' => $this->put('poster',true),
-        'trailer' => $this->post('trailer',true),
+        'trailer' => $this->put('trailer',true),
         'sinopsis' => $this->put('sinopsis',true),
         'pemeran' => $this->put('pemeran',true),
         'genre' => $this->put('genre',true),
         'tahun_rilis' => $this->put('tahun_rilis',true),
-        'negara' => $this->post('negara',true),
+        'durasi' => $this->put('durasi',true),
+        'negara' => $this->put('negara',true),
     ];
       $id = $this->put('id');
       if($id === null){
